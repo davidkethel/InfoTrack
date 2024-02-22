@@ -25,7 +25,7 @@ namespace WebApplication.Core.Users.Queries
         public class Handler : IRequestHandler<ListUsersQuery, PaginatedDto<IEnumerable<UserDto>>>
         {
             /// <inheritdoc />
-            public async Task<PaginatedDto<IEnumerable<UserDto>>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
+            public Task<PaginatedDto<IEnumerable<UserDto>>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException("Implement a way to get a paginated list of all the users in the database.");
             }
