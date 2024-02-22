@@ -17,7 +17,10 @@ namespace WebApplication.Core
         public static IServiceCollection AddCoreServices(this IServiceCollection services, IWebHostEnvironment env)
         {
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
-            services.AddMediatR(new[] { typeof(DependencyInjection).Assembly }, cfg => cfg.AsScoped());
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+            });
             services.AddAutoMapper(typeof(DependencyInjection).Assembly);
             services.AddInfrastructureServices();
 
