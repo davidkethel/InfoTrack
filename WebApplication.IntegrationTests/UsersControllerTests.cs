@@ -1,17 +1,17 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
+using System.Threading.Tasks;
 using WebApplication.Core.Common.Models;
 using WebApplication.Core.Users.Commands;
 using WebApplication.Core.Users.Common.Models;
@@ -75,7 +75,7 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(StatusCodes.Status400BadRequest);
+                           .Be(HttpStatusCode.BadRequest);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
@@ -97,7 +97,7 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(StatusCodes.Status404NotFound);
+                           .Be(HttpStatusCode.NotFound); 
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
@@ -120,7 +120,7 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(StatusCodes.Status400BadRequest);
+                           .Be(HttpStatusCode.BadRequest);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
@@ -140,7 +140,7 @@ namespace WebApplication.IntegrationTests
             HttpResponseMessage responseMessage = await client.GetAsync(url);
 
             // Assert
-            responseMessage.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            responseMessage.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should().Be("'Page Number' must be greater than '0'.");
@@ -329,7 +329,7 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(StatusCodes.Status400BadRequest);
+                           .Be(HttpStatusCode.BadRequest);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
@@ -371,7 +371,7 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(StatusCodes.Status400BadRequest);
+                           .Be(HttpStatusCode.BadRequest);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
@@ -393,7 +393,7 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(StatusCodes.Status404NotFound);
+                           .Be(HttpStatusCode.NotFound);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
@@ -418,7 +418,7 @@ namespace WebApplication.IntegrationTests
             HttpResponseMessage responseMessage = await client.PutAsync(url, new StringContent(stringContent, Encoding.UTF8, MediaTypeNames.Application.Json));
 
             // Assert
-            responseMessage.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            responseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should().Be("The user '200' could not be found.");
