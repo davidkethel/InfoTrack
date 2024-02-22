@@ -33,37 +33,37 @@ namespace WebApplication.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<User>> FindAsync(string? givenNames, string? lastName, CancellationToken cancellationToken = default)
+        public  Task<IEnumerable<User>> FindAsync(string? givenNames, string? lastName, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException("Implement a way to find users that match the provided given names OR last name.");
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<User>> GetPaginatedAsync(int page, int count, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<User>> GetPaginatedAsync(int page, int count, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException("Implement a way to get a 'page' of users.");
         }
 
         /// <inheritdoc />
-        public async Task<User> AddAsync(User user, CancellationToken cancellationToken = default)
+        public Task<User> AddAsync(User user, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException("Implement a way to add a new user, including their contact details.");
         }
 
         /// <inheritdoc />
-        public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)
+        public Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException("Implement a way to update an existing user, including their contact details.");
         }
 
         /// <inheritdoc />
-        public async Task<User?> DeleteAsync(int id, CancellationToken cancellationToken = default)
+        public Task<User?> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException("Implement a way to delete an existing user, including their contact details.");
         }
 
         /// <inheritdoc />
-        public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+        public Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException("Implement a way to count the number of users in the database.");
         }
