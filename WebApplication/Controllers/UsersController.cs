@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace WebApplication.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IValidator<GetUserQuery> _validator;
 
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator, IValidator<GetUserQuery> validator)
         {
             _mediator = mediator;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -25,6 +28,12 @@ namespace WebApplication.Controllers
             [FromQuery] GetUserQuery query,
             CancellationToken cancellationToken)
         {
+            var validationResponse = await _validator.ValidateAsync(query, cancellationToken);
+            if(!validationResponse.IsValid) 
+            {
+                return BadRequest(validationResponse.ToString());
+            }
+
             UserDto result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
