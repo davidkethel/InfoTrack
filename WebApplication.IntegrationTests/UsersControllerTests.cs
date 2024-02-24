@@ -64,7 +64,7 @@ namespace WebApplication.IntegrationTests
         // TEST DESCRIPTION - Invalid user id should return bad request
         [Theory]
         [AutoData]
-        public async Task GivenInvalidUserId_WhenGettingUserById_ThenReturnBadRequest([Range(-99, 0)]int userId)
+        public async Task GivenInvalidUserId_WhenGettingUserById_ThenReturnBadRequest([Range(-99, 0)] int userId)
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -294,7 +294,7 @@ namespace WebApplication.IntegrationTests
             responseMessage.EnsureSuccessStatusCode();
             var createdUser = await responseMessage.DeserializeContentAsync<UserDto>();
             responseMessage.Headers.Location.Should()
-                           .Be($"/Users?id={createdUser.UserId}");
+                           .Be($"{client.BaseAddress}Users?id={createdUser.UserId}");
 
             var getUrl = $"{client.BaseAddress}Users?id={createdUser.UserId}";
             HttpResponseMessage getResponse = await client.GetAsync(getUrl);
