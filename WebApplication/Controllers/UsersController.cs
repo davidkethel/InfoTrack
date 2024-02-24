@@ -26,7 +26,6 @@ namespace WebApplication.Controllers
             [FromQuery] GetUserQuery query,
             CancellationToken cancellationToken)
         {
-
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
@@ -34,14 +33,22 @@ namespace WebApplication.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
         [Route("Find")]
-        public async  Task<IActionResult> FindUserAsync([FromQuery] FindUsersQuery query,
+        public async Task<IActionResult> FindUserAsync([FromQuery] FindUsersQuery query,
             CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
 
-        // TODO: create a route (at /List) that can retrieve a paginated list of users using the `ListUsersQuery`
+        [HttpGet]
+        [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+        [Route("List")]
+        public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query
+            , CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(query, cancellationToken);
+            return Ok(result);
+        }
 
         // TODO: create a route that can create a user using the `CreateUserCommand`
 

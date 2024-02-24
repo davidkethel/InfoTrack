@@ -17,7 +17,7 @@ namespace WebApplication.Core.Users.Queries
         public class Validator : AbstractValidator<ListUsersQuery>
         {
             public Validator()
-            {                
+            {
                 RuleFor(x => x.PageNumber)
                     .GreaterThan(0)
                     .WithMessage("'Page Number' must be greater than '0'.");
