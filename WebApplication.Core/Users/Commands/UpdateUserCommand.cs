@@ -5,6 +5,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using WebApplication.Core.Users.Common.Models;
+using WebApplication.Infrastructure.Entities;
 using WebApplication.Infrastructure.Interfaces;
 
 namespace WebApplication.Core.Users.Commands
@@ -43,10 +44,34 @@ namespace WebApplication.Core.Users.Commands
 
         public class Handler : IRequestHandler<UpdateUserCommand, UserDto>
         {
-            /// <inheritdoc />
-            public Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+            private readonly IUserService _userService;
+            private readonly IMapper _mapper;
+
+            public Handler(IUserService userService, IMapper mapper)
             {
-                throw new NotImplementedException("Implement a way to update the user associated with the provided Id.");
+                _userService = userService;
+                _mapper = mapper;
+            }
+
+            /// <inheritdoc />
+            public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+            {
+                var user = new User
+                {
+                    Id = request.Id,
+                    GivenNames = request.GivenNames,
+                    LastName = request.LastName,
+                    ContactDetail = new ContactDetail
+                    {
+                        EmailAddress = request.EmailAddress,
+                        MobileNumber = request.MobileNumber
+                    }
+                };
+                
+                var updatedUser = await _userService.UpdateAsync(user, cancellationToken);
+                var result = _mapper.Map<UserDto>(updatedUser);
+
+                return result;
             }
         }
     }
