@@ -86,7 +86,7 @@ namespace WebApplication.IntegrationTests
         // TEST DESCRIPTION - Out of range user id should return not found
         [Theory]
         [AutoData]
-        public async Task GivenOutOfRangeUserId_WhenGettingUserById_ThenReturnNotFound([Range(20,99)]int userId)
+        public async Task GivenOutOfRangeUserId_WhenGettingUserById_ThenReturnNotFound([Range(20, 99)] int userId)
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -97,11 +97,32 @@ namespace WebApplication.IntegrationTests
 
             // Assert
             responseMessage.StatusCode.Should()
-                           .Be(HttpStatusCode.NotFound); 
+                           .Be(HttpStatusCode.NotFound);
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
                           .Be($"The user '{userId}' could not be found.");
+        }
+
+        // TEST NAME - findUsers
+        // TEST DESCRIPTION - Empty Given Name and Last Name should return bad request.
+        [Fact]
+        public async Task GivenEmptyGivenNameAndLastName_WhenFindingUsers_ThenReturnBadRequest()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            var url = $"{client.BaseAddress}Users/Find";
+
+            // Act
+            HttpResponseMessage responseMessage = await client.GetAsync(url);
+
+            // Assert
+            responseMessage.StatusCode.Should()
+                         .Be(HttpStatusCode.BadRequest);
+
+            var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
+            problemDetails.Detail.Should()
+                          .Be("'Given Names' must not be empty.\r\n'Last Name' must not be empty.");
         }
 
         // TEST NAME - findUsers

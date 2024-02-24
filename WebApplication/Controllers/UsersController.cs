@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -14,12 +15,14 @@ namespace WebApplication.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IValidator<GetUserQuery> _validator;
+        private readonly IValidator<GetUserQuery> _getUserQueryValidator;
+        private readonly IValidator<FindUsersQuery> _findUsersQueryValidator;
 
-        public UsersController(IMediator mediator, IValidator<GetUserQuery> validator)
+        public UsersController(IMediator mediator, IValidator<GetUserQuery> getUserQueryValidator, IValidator<FindUsersQuery> findUsersQueryValidator)
         {
             _mediator = mediator;
-            _validator = validator;
+            _getUserQueryValidator = getUserQueryValidator;
+            _findUsersQueryValidator = findUsersQueryValidator;
         }
 
         [HttpGet]
@@ -28,17 +31,32 @@ namespace WebApplication.Controllers
             [FromQuery] GetUserQuery query,
             CancellationToken cancellationToken)
         {
-            var validationResponse = await _validator.ValidateAsync(query, cancellationToken);
+            var validationResponse = await _getUserQueryValidator.ValidateAsync(query, cancellationToken);
             if(!validationResponse.IsValid) 
             {
                 return BadRequest(validationResponse.ToString());
             }
 
-            UserDto result = await _mediator.Send(query, cancellationToken);
+            var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
 
-        // TODO: create a route (at /Find) that can retrieve a list of matching users using the `FindUsersQuery`
+        [HttpGet]
+        [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+        [Route("Find")]
+        public async  Task<IActionResult> FindUserAsync([FromQuery] FindUsersQuery query,
+            CancellationToken cancellationToken)
+        {
+            
+            var validationResponse = await _findUsersQueryValidator.ValidateAsync(query, cancellationToken);
+            if (!validationResponse.IsValid)
+            {
+                return BadRequest(validationResponse.ToString());
+            }
+
+            var result = await _mediator.Send(query, cancellationToken);
+            return Ok(result);
+        }
 
         // TODO: create a route (at /List) that can retrieve a paginated list of users using the `ListUsersQuery`
 
