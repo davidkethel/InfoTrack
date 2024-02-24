@@ -33,9 +33,13 @@ namespace WebApplication.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public  Task<IEnumerable<User>> FindAsync(string? givenNames, string? lastName, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<User>> FindAsync(string? givenNames, string? lastName, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException("Implement a way to find users that match the provided given names OR last name.");
+            var users = await _dbContext.Users.Where(user => user.GivenNames == givenNames || user.LastName == lastName)
+                                        .Include(x => x.ContactDetail)
+                                        .ToListAsync(cancellationToken);
+
+            return users;
         }
 
         /// <inheritdoc />
