@@ -21,8 +21,22 @@ namespace WebApplication.Core.Users.Commands
         {
             public Validator()
             {
-                // TODO: Create validation rules for UpdateUserCommand so that all properties are required.
-                // If you are feeling ambitious, also create a validation rule that ensures the user exists in the database.
+                RuleFor(x => x.Id)
+                    .NotEmpty();
+
+                RuleFor(x => x.GivenNames)
+                    .NotEmpty();
+
+                RuleFor(x => x.LastName)
+                    .NotEmpty();
+
+                RuleFor(x => x.EmailAddress)
+                    .NotEmpty();
+
+                RuleFor(x => x.MobileNumber)
+                    .NotEmpty();
+
+                // TODO: If you are feeling ambitious, also create a validation rule that ensures the user exists in the database.
             }
         }
 
