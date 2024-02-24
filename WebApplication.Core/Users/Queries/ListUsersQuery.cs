@@ -45,7 +45,11 @@ namespace WebApplication.Core.Users.Queries
                 return new PaginatedDto<IEnumerable<UserDto>>
                 {
                     Data = users.Select(user => _mapper.Map<UserDto>(user)),
-                    HasNextPage = users.Count() == request.ItemsPerPage // TODO: not sure about this.
+                    // This will work most of the time.However, when the total number of users is divided by the items per page
+                    // and the last page is requested, For example: Total number of users = 50 the items per page is 10,
+                    // and page 5 is requested.Then, HasNextPage will be true, but the next page will be empty.To fix this,
+                    // I would have to make an additional database call for every request, and I'm not sure it's worth it.
+                    HasNextPage = users.Count() == request.ItemsPerPage
                 };
             }
         }
