@@ -43,9 +43,13 @@ namespace WebApplication.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<User>> GetPaginatedAsync(int page, int count, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<User>> GetPaginatedAsync(int page, int count, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException("Implement a way to get a 'page' of users.");
+            var users = await _dbContext.Users.Skip((page - 1) * count)
+                                            .Take(count)
+                                            .ToListAsync(cancellationToken);
+
+            return users;
         }
 
         /// <inheritdoc />
