@@ -62,7 +62,15 @@ namespace WebApplication.Controllers
             return CreatedAtRoute(routeValues, result);
         }
 
-        // TODO: create a route that can update an existing user using the `UpdateUserCommand`
+        [HttpPut]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command
+            , CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+
+        }
 
         // TODO: create a route that can delete an existing user using the `DeleteUserCommand`
     }
