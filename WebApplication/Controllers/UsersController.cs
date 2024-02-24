@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using WebApplication.Core.Users.Common.Models;
 using WebApplication.Core.Users.Queries;
 
@@ -15,14 +14,10 @@ namespace WebApplication.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IValidator<GetUserQuery> _getUserQueryValidator;
-        private readonly IValidator<FindUsersQuery> _findUsersQueryValidator;
 
-        public UsersController(IMediator mediator, IValidator<GetUserQuery> getUserQueryValidator, IValidator<FindUsersQuery> findUsersQueryValidator)
+        public UsersController(IMediator mediator)
         {
             _mediator = mediator;
-            _getUserQueryValidator = getUserQueryValidator;
-            _findUsersQueryValidator = findUsersQueryValidator;
         }
 
         [HttpGet]

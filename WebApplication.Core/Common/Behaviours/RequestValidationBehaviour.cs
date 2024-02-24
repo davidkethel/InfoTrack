@@ -26,7 +26,7 @@ namespace WebApplication.Core.Common.Behaviours
                     _validators.Select(validator => validator.ValidateAsync(context, cancellationToken)));
 
                 var failures = validationResults
-                    .Where(result => result.Errors.Any())
+                    .Where(result => result.Errors.Count != 0)
                     .SelectMany(result =>  result.Errors)
                     .ToList();
 
