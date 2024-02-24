@@ -53,9 +53,11 @@ namespace WebApplication.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public Task<User> AddAsync(User user, CancellationToken cancellationToken = default)
+        public async Task<User> AddAsync(User user, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException("Implement a way to add a new user, including their contact details.");
+            await _dbContext.AddAsync(user, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return user;
         }
 
         /// <inheritdoc />

@@ -24,7 +24,7 @@ namespace WebApplication.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetUserAsync(
+        public async Task<IActionResult> GetUser(
             [FromQuery] GetUserQuery query,
             CancellationToken cancellationToken)
         {
@@ -35,7 +35,7 @@ namespace WebApplication.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
         [Route("Find")]
-        public async Task<IActionResult> FindUserAsync([FromQuery] FindUsersQuery query,
+        public async Task<IActionResult> FindUser([FromQuery] FindUsersQuery query,
             CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
@@ -45,7 +45,7 @@ namespace WebApplication.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(PaginatedDto<List<UserDto>>), StatusCodes.Status200OK)]
         [Route("List")]
-        public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query
+        public async Task<IActionResult> ListUsers([FromQuery] ListUsersQuery query
             , CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
@@ -53,13 +53,14 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command,
             CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
-            return Ok(result);
-        } 
+            var routeValues = new { id = result.UserId };
+            return CreatedAtRoute(routeValues, result);
+        }
 
         // TODO: create a route that can update an existing user using the `UpdateUserCommand`
 
