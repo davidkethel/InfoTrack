@@ -61,9 +61,11 @@ namespace WebApplication.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)
+        public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException("Implement a way to update an existing user, including their contact details.");
+            _dbContext.Update(user);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return user;
         }
 
         /// <inheritdoc />
