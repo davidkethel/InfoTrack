@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using WebApplication.Core.Common.Models;
 using WebApplication.Core.Users.Common.Models;
+using WebApplication.Infrastructure.Interfaces;
 
 namespace WebApplication.Core.Users.Queries
 {
@@ -26,10 +29,24 @@ namespace WebApplication.Core.Users.Queries
 
         public class Handler : IRequestHandler<ListUsersQuery, PaginatedDto<IEnumerable<UserDto>>>
         {
-            /// <inheritdoc />
-            public Task<PaginatedDto<IEnumerable<UserDto>>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
+            private readonly IUserService _userService;
+            private readonly IMapper _mapper;
+
+            public Handler(IUserService userService, IMapper mapper)
             {
-                throw new NotImplementedException("Implement a way to get a paginated list of all the users in the database.");
+                _userService = userService;
+                _mapper = mapper;
+            }
+
+            /// <inheritdoc />
+            public async Task<PaginatedDto<IEnumerable<UserDto>>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
+            {
+                var users = await _userService.GetPaginatedAsync(request.PageNumber, request.ItemsPerPage, cancellationToken);
+                return new PaginatedDto<IEnumerable<UserDto>>
+                {
+                    Data = users.Select(user => _mapper.Map<UserDto>(user)),
+                    HasNextPage = users.Count() == request.ItemsPerPage // TODO: not sure about this.
+                };
             }
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication.Core.Common.Models;
 using WebApplication.Core.Users.Common.Models;
 using WebApplication.Core.Users.Queries;
 
@@ -41,7 +42,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedDto<List<UserDto>>), StatusCodes.Status200OK)]
         [Route("List")]
         public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query
             , CancellationToken cancellationToken)
