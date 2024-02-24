@@ -22,7 +22,8 @@ namespace WebApplication.Core.Users.Commands
             public Validator()
             {
                 RuleFor(x => x.Id)
-                    .NotEmpty();
+                    .GreaterThan(0)
+                    .WithMessage("'Id' must be greater than '0'.");
 
                 RuleFor(x => x.GivenNames)
                     .NotEmpty();
