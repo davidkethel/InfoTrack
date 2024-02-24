@@ -122,7 +122,7 @@ namespace WebApplication.IntegrationTests
 
             var problemDetails = await responseMessage.DeserializeContentAsync<StatusCodeProblemDetails>();
             problemDetails.Detail.Should()
-                          .Be("'Given Names' must not be empty.\r\n'Last Name' must not be empty.");
+                          .Be("'Given Names' must not be empty.;'Last Name' must not be empty.");
         }
 
         // TEST NAME - findUsers

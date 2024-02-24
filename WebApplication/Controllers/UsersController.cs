@@ -31,11 +31,6 @@ namespace WebApplication.Controllers
             [FromQuery] GetUserQuery query,
             CancellationToken cancellationToken)
         {
-            var validationResponse = await _getUserQueryValidator.ValidateAsync(query, cancellationToken);
-            if(!validationResponse.IsValid) 
-            {
-                return BadRequest(validationResponse.ToString());
-            }
 
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
@@ -47,13 +42,6 @@ namespace WebApplication.Controllers
         public async  Task<IActionResult> FindUserAsync([FromQuery] FindUsersQuery query,
             CancellationToken cancellationToken)
         {
-            
-            var validationResponse = await _findUsersQueryValidator.ValidateAsync(query, cancellationToken);
-            if (!validationResponse.IsValid)
-            {
-                return BadRequest(validationResponse.ToString());
-            }
-
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }
