@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Builder;
@@ -10,8 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using Serilog;
+using System.Net.Mime;
 using WebApplication.Core;
 using WebApplication.Core.Common.CustomProblemDetails;
+using WebApplication.Core.Common.Middleware;
 
 namespace WebApplication
 {
@@ -29,6 +31,11 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            Log.Logger = new LoggerConfiguration()
+              .ReadFrom.Configuration(Configuration)
+              .CreateLogger();
+
             services.AddControllers(
                         options =>
                         {
@@ -77,8 +84,12 @@ namespace WebApplication
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication v1"));
             }
 
+            app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
             app.UseProblemDetails();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
             app.UseRouting();
 
