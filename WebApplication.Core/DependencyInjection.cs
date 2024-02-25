@@ -24,6 +24,7 @@ namespace WebApplication.Core
             services.AddAutoMapper(typeof(DependencyInjection).Assembly);
             services.AddInfrastructureServices();
 
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
 
             services.AddProblemDetails(
