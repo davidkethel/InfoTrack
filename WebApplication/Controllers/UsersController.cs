@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using WebApplication.Core.Common.CustomProblemDetails;
 using WebApplication.Core.Common.Models;
 using WebApplication.Core.Users.Commands;
 using WebApplication.Core.Users.Common.Models;
@@ -46,8 +45,8 @@ namespace WebApplication.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(PaginatedDto<List<UserDto>>), StatusCodes.Status200OK)]
         [Route("List")]
-        public async Task<IActionResult> ListUsers([FromQuery] ListUsersQuery query
-            , CancellationToken cancellationToken)
+        public async Task<IActionResult> ListUsers([FromQuery] ListUsersQuery query,
+            CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
@@ -65,15 +64,20 @@ namespace WebApplication.Controllers
 
         [HttpPut]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(NotFoundProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command
-            , CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command,
+             CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
             return Ok(result);
-
         }
 
-        // TODO: create a route that can delete an existing user using the `DeleteUserCommand`
+        [HttpDelete]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteUser([FromQuery] DeleteUserCommand command,
+             CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+        }
     }
 }
