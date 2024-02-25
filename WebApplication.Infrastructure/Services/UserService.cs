@@ -63,9 +63,21 @@ namespace WebApplication.Infrastructure.Services
         /// <inheritdoc />
         public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)
         {
-            _dbContext.Update(user);
+            var userToUpdate = await _dbContext.Users.Where(x => x.Id == user.Id)
+                                         .Include(x => x.ContactDetail)
+                                         .FirstAsync(cancellationToken);
+
+            userToUpdate.GivenNames = user.GivenNames;
+            userToUpdate.LastName = user.LastName;
+            if (user.ContactDetail != null)
+            {
+                userToUpdate.ContactDetail ??= new ContactDetail();
+                userToUpdate.ContactDetail.EmailAddress = user.ContactDetail.EmailAddress;
+                userToUpdate.ContactDetail.MobileNumber = user.ContactDetail.MobileNumber;
+            }
+
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return user;
+            return userToUpdate;
         }
 
         /// <inheritdoc />
