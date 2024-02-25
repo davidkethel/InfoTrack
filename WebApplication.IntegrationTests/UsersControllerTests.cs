@@ -228,6 +228,9 @@ namespace WebApplication.IntegrationTests
             users.Data.Count()
                  .Should()
                  .Be(10);
+
+            // Ensure list endpoint returns the user's contact details
+            users.Data.Should().Contain(x => x.UserId == 10 && !string.IsNullOrWhiteSpace(x.EmailAddress) && !string.IsNullOrWhiteSpace(x.MobileNumber));
         }
 
         // TEST NAME - listUser
