@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Builder;
@@ -10,9 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using Serilog;
+using System.Net.Mime;
 using WebApplication.Core;
 using WebApplication.Core.Common.CustomProblemDetails;
-using Serilog;
+using WebApplication.Core.Common.Middleware;
 
 namespace WebApplication
 {
@@ -87,6 +88,8 @@ namespace WebApplication
 
             app.UseHttpsRedirection();
             app.UseProblemDetails();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
             app.UseRouting();
 
