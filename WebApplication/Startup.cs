@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using WebApplication.Core;
 using WebApplication.Core.Common.CustomProblemDetails;
+using Serilog;
 
 namespace WebApplication
 {
@@ -29,6 +30,11 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            Log.Logger = new LoggerConfiguration()
+              .ReadFrom.Configuration(Configuration)
+              .CreateLogger();
+
             services.AddControllers(
                         options =>
                         {
@@ -76,6 +82,8 @@ namespace WebApplication
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication v1"));
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
             app.UseProblemDetails();
