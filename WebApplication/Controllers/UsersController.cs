@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication.Core.Common.CustomProblemDetails;
 using WebApplication.Core.Common.Models;
 using WebApplication.Core.Users.Commands;
 using WebApplication.Core.Users.Common.Models;
@@ -64,6 +65,7 @@ namespace WebApplication.Controllers
 
         [HttpPut]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(NotFoundProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command
             , CancellationToken cancellationToken)
         {
