@@ -82,9 +82,18 @@ namespace WebApplication.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public Task<User?> DeleteAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<User?> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException("Implement a way to delete an existing user, including their contact details.");
+            var userToDelete = await _dbContext.Users.Where(x => x.Id == id)
+                                             .Include(x => x.ContactDetail)
+                                             .FirstOrDefaultAsync(cancellationToken);
+
+            if (userToDelete != null)
+            {
+                _dbContext.Users.Remove(userToDelete);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            return userToDelete;
         }
 
         /// <inheritdoc />
