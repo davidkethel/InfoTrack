@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication.Core.Common.CustomProblemDetails;
 using WebApplication.Core.Common.Models;
 using WebApplication.Core.Users.Commands;
 using WebApplication.Core.Users.Common.Models;
@@ -62,7 +63,16 @@ namespace WebApplication.Controllers
             return CreatedAtRoute(routeValues, result);
         }
 
-        // TODO: create a route that can update an existing user using the `UpdateUserCommand`
+        [HttpPut]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(NotFoundProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command
+            , CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+
+        }
 
         // TODO: create a route that can delete an existing user using the `DeleteUserCommand`
     }
