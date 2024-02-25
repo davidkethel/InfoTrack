@@ -46,6 +46,7 @@ namespace WebApplication.Infrastructure.Services
         public async Task<IEnumerable<User>> GetPaginatedAsync(int page, int count, CancellationToken cancellationToken = default)
         {
             var users = await _dbContext.Users.Skip((page - 1) * count)
+                                            .Include(x => x.ContactDetail)
                                             .Take(count)
                                             .ToListAsync(cancellationToken);
 
